@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>SberTaskMain</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <style type="text/css">
+        .form-style-8{
+            font-family: 'Open Sans Condensed', arial, sans;
+            width: 500px;
+            padding: 30px;
+            background: #FFFFFF;
+            margin: 50px auto;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+            -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+            -webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
+
+        }
+        .form-style-8 h2{
+            background: #4D4D4D;
+            text-transform: uppercase;
+            font-family: 'Open Sans Condensed', sans-serif;
+            color: #34CACA;
+            font-size: 18px;
+            font-weight: 100;
+            padding: 20px;
+            margin: -30px -30px 30px -30px;
+        }
+        .form-style-8 input[type="text"],
+        .form-style-8 input[type="date"],
+        .form-style-8 input[type="datetime"],
+        .form-style-8 input[type="email"],
+        .form-style-8 input[type="number"],
+        .form-style-8 input[type="search"],
+        .form-style-8 input[type="time"],
+        .form-style-8 input[type="url"],
+        .form-style-8 input[type="password"],
+        .form-style-8 textarea,
+        .form-style-8 select
+        {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            outline: none;
+            display: block;
+            width: 100%;
+            padding: 7px;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            background: transparent;
+            margin-bottom: 10px;
+            font: 16px Arial, Helvetica, sans-serif;
+            height: 45px;
+        }
+        .form-style-8 textarea{
+            resize:none;
+            overflow: hidden;
+        }
+        .form-style-8 input[type="button"],
+        .form-style-8 input[type="submit"]{
+            -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+            -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+            box-shadow: inset 0px 1px 0px 0px #45D6D6;
+            background-color: #2CBBBB;
+            border: 1px solid #27A0A0;
+            display: inline-block;
+            cursor: pointer;
+            color: #FFFFFF;
+            font-family: 'Open Sans Condensed', sans-serif;
+            font-size: 14px;
+            padding: 8px 18px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .form-style-8 input[type="button"]:hover,
+        .form-style-8 input[type="submit"]:hover {
+            background:linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
+            background-color:#34CACA;
+        }
+    </style>
+</head>
+
+<body>
+<script>
+    function eventDefault (e) {
+        e.preventDefault();
+    }
+</script>
+
+<script type="text/javascript">
+    //auto expand textarea
+    function adjust_textarea(h) {
+        h.style.height = "20px";
+        h.style.height = (h.scrollHeight)+"px";
+    }
+</script>
+
+<script>
+    function checBox() {
+        var check = document.getElementById('mainBoss');
+
+        if (check.checked){
+            document.getElementById('selectboss').style.display="none";
+            document.getElementById('labelforselect').style.display="none";
+        }
+        else{
+            document.getElementById('selectboss').style.display="block";
+            document.getElementById('labelforselect').style.display="block";
+        }
+    }
+</script>
+
+<container class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-style-8">
+                <h2>Формы</h2>
+                <form th:action="@{/showName}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="name" placeholder="Поиск сотрудника по имени" />
+                    <input type="submit" value="Поиск" />
+                </form>
+                <form th:action="@{/showUnder}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="bossName" placeholder="Поиск всех подчиненных сотрудника" />
+                    <input type="submit" value="Поиск" />
+                </form>
+                <form th:action="@{/showBosses}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="workerName" placeholder="Поиск всех боссов сотрудника" />
+                    <input type="submit" value="Поиск" />
+                </form>
+                <form th:action="@{/sendMail}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="addr" placeholder="Адрес электронной почты" />
+                    <input type="submit" value="Отправить статистику" style="background: #7d6aa5; border: none; box-shadow: none;"/>
+                </form>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-style-8">
+                <h2>Новый сотрудник</h2>
+                <form th:action="@{/add}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="name" placeholder="Имя" />
+                    <input type="text" th:name="job" placeholder="Должность" />
+                    <input type="text"  th:name="cluster" placeholder="Подразделение" />
+
+                    <label for="selectboss" id="labelforselect">Укажите начальника сотрудника</label>
+                    <select class="form-control" id="selectboss" th:name="bossName">
+                        <option>...</option>
+                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
+
+                    <input type="submit" value="Сохранить" />
+
+                    <input type="checkbox"  id="mainBoss"  style="margin-left: 10px;" onclick="checBox()">
+                    <label for="mainBoss">Главный босс фирмы</label>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-left: 10px; margin-right: 10px;">
+        <div class="col-12">
+            <table class="table" id="allUsers">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Подразделение</th>
+                    <th scope="col">Должность</th>
+                    <th scope="col">Id руководителя</th>
+                    <th scope="col">Удаление</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="w : ${workers}">
+                    <td th:text="${w.id}"></td>
+                    <td th:text="${w.name}"></td>
+                    <td th:text="${w.cluster}"></td>
+                    <td th:text="${w.job}"></td>
+                    <td th:text="${w.bossName}"></td>
+                    <td>
+                        <form th:action="@{/deleteWorker/{id}(id=${w.id})}" method="post" onsubmit="eventDefault(e)">
+                            <button type="submit" class="btn btn-dark"><i class="fa fa-eraser"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <form th:action="@{/addRole}" method="post" onsubmit="eventDefault(e)">
+        <input type="text" th:name="role_name" placeholder="role_name" />
+        <input type="submit" value="Save" />
+    </form>
+
+    <form th:action="@{/addUser}" method="post" onsubmit="eventDefault(e)">
+        <input type="text" th:name="name" placeholder="name" />
+        <input type="text" th:name="pass" placeholder="pass" />
+        <input type="text" th:name="role_name" placeholder="role_name" />
+        <input type="submit" value="Save" />
+    </form>
+</container>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
