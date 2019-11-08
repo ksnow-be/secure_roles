@@ -1,6 +1,6 @@
 package mvc.mvc.controller;
 
-import mvc.mvc.model.services.WorkerDTO;
+import mvc.mvc.model.services.ClusterWorkerDTO;
 import mvc.mvc.model.components.MyMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.*;
 public class MainController {
 
     private MyMailSender mailSender;
-    private WorkerDTO workerDTO;
+    private ClusterWorkerDTO clusterWorkerDTO;
 
     @Autowired
-    public MainController(MyMailSender mailSender, WorkerDTO workerDTO) {
+    public MainController(MyMailSender mailSender, ClusterWorkerDTO clusterWorkerDTO) {
         this.mailSender = mailSender;
-        this.workerDTO = workerDTO;
+        this.clusterWorkerDTO = clusterWorkerDTO;
     }
 
     @GetMapping(path = "/")
     public String showAllWorkers(Model model){
-        return workerDTO.listOfAll(model);
+        return "index";
     }
 
     @PostMapping("/deleteWorker/{id}")
     public String deleteWorker(@PathVariable Long id){
-        return workerDTO.deleteWorker(id);
+        return "index";
     }
 
     @PostMapping(path = "/sendMail")
     public String sendStats(@RequestParam String addr){
-        return mailSender.sendStats(addr);
+        return "index";
     }
 }

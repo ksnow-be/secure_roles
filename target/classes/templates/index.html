@@ -140,21 +140,43 @@
         <div class="col-6">
             <div class="form-style-8">
                 <h2>Новый сотрудник</h2>
-                <form th:action="@{/add}" method="post" onsubmit="eventDefault(e)">
+                <form th:action="@{/addWorker}" method="post" onsubmit="eventDefault(e)">
                     <input type="text" th:name="name" placeholder="Имя" />
                     <input type="text" th:name="job" placeholder="Должность" />
-                    <input type="text"  th:name="cluster" placeholder="Подразделение" />
+                    <input type="text"  th:name="cluster_name" placeholder="Подразделение" />
 
-                    <label for="selectboss" id="labelforselect">Укажите начальника сотрудника</label>
-                    <select class="form-control" id="selectboss" th:name="bossName">
-                        <option>...</option>
-                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
-                    </select>
+<!--                    <label for="selectboss" id="labelforselect">Укажите начальника сотрудника</label>-->
+<!--                    <select class="form-control" id="selectboss" th:name="bossName">-->
+<!--                        <option>...</option>-->
+<!--                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>-->
+<!--                    </select>-->
 
                     <input type="submit" value="Сохранить" />
 
-                    <input type="checkbox"  id="mainBoss"  style="margin-left: 10px;" onclick="checBox()">
-                    <label for="mainBoss">Главный босс фирмы</label>
+<!--                    <input type="checkbox"  id="mainBoss"  style="margin-left: 10px;" onclick="checBox()">-->
+<!--                    <label for="mainBoss">Главный босс фирмы</label>-->
+                </form>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-style-8">
+                <h2>Новый cluster</h2>
+                <form th:action="@{/addCluster}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="name" placeholder="Имя" />
+                    <input type="text" th:name="bossName" placeholder="Boss name" />
+                    <input type="text"  th:name="headCluster" placeholder="Head cluster" />
+
+                    <!--                    <label for="selectboss" id="labelforselect">Укажите начальника сотрудника</label>-->
+                    <!--                    <select class="form-control" id="selectboss" th:name="bossName">-->
+                    <!--                        <option>...</option>-->
+                    <!--                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>-->
+                    <!--                    </select>-->
+
+                    <input type="submit" value="Сохранить" />
+
+                    <!--                    <input type="checkbox"  id="mainBoss"  style="margin-left: 10px;" onclick="checBox()">-->
+                    <!--                    <label for="mainBoss">Главный босс фирмы</label>-->
                 </form>
             </div>
         </div>

@@ -1,51 +1,26 @@
 package mvc.mvc.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-
 
 @Entity
-@Table(name = "base")
+@Table(name = "workers")
 public class Worker {
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "cluster")
-    private String cluster;
-
-    @Column(name = "job")
     private String job;
 
-    @Column(name = "boss_id")
-    private Long bossId;
+    @ManyToOne
+    @JoinColumn(name = "cluster_id")
+    private Cluster cluster;
 
-    @Column(name = "boss_name")
-    private String bossName;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "bossId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Worker> workers = new ArrayList<>();
 
     public Long getId() {
         return id;
-    }
-
-    public String getBossName() {
-        return bossName;
-    }
-
-    public void setBossName(String bossName) {
-        this.bossName = bossName;
     }
 
     public void setId(Long id) {
@@ -60,14 +35,6 @@ public class Worker {
         this.name = name;
     }
 
-    public String getCluster() {
-        return cluster;
-    }
-
-    public void setCluster(String cluster) {
-        this.cluster = cluster;
-    }
-
     public String getJob() {
         return job;
     }
@@ -76,19 +43,11 @@ public class Worker {
         this.job = job;
     }
 
-    public Long getBossId() {
-        return bossId;
+    public Cluster getCluster() {
+        return cluster;
     }
 
-    public void setBossId(Long bossId) {
-        this.bossId = bossId;
-    }
-
-    public List<Worker> getWorkers() {
-        return workers;
-    }
-
-    public void setWorkers(List<Worker> workers) {
-        this.workers = workers;
+    public void setCluster(Cluster cluster) {
+        this.cluster = cluster;
     }
 }

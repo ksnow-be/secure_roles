@@ -9,7 +9,4 @@ import java.util.List;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Integer> {
     Worker findByName(String name);
-    List<Worker> findByBossId(Long BossId);
-    Worker findById(Long Id);
-    void deleteByName(String name);
 }
