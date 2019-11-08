@@ -1,15 +1,18 @@
 package mvc.mvc.model.security;
 
+
 import mvc.mvc.model.entity.User;
 import mvc.mvc.model.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -26,10 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByName(userName);
         if (user == null) throw new UsernameNotFoundException(userName + " not found");
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
-        System.out.println(customUserDetails.getUsername() + " " + customUserDetails.getPassword() + " " + customUserDetails.getAuthorities());
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
 
-        return new CustomUserDetails(user);
+        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPass(), grantedAuthorities);
     }
 }
