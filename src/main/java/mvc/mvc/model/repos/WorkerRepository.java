@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Integer> {
     Worker findByName(String name);
+    void deleteById(Long id);
 }

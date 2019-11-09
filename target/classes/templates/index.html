@@ -123,18 +123,21 @@
                     <input type="text" th:name="name" placeholder="Поиск сотрудника по имени" />
                     <input type="submit" value="Поиск" />
                 </form>
-                <form th:action="@{/showUnder}" method="post" onsubmit="eventDefault(e)">
-                    <input type="text" th:name="bossName" placeholder="Поиск всех подчиненных сотрудника" />
+
+
+                <form th:action="@{/clusterInfo}" method="post" onsubmit="eventDefault(e)">
+                    <label for="selectcluster" id="labelforselect" style="margin-top: 10px;">Информация по отделу</label>
+                    <select class="form-control" id="selectcluster" th:name="clusterName">
+                        <option th:each="w : ${clusters}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
                     <input type="submit" value="Поиск" />
                 </form>
-                <form th:action="@{/showBosses}" method="post" onsubmit="eventDefault(e)">
-                    <input type="text" th:name="workerName" placeholder="Поиск всех боссов сотрудника" />
-                    <input type="submit" value="Поиск" />
-                </form>
-                <form th:action="@{/sendMail}" method="post" onsubmit="eventDefault(e)">
-                    <input type="text" th:name="addr" placeholder="Адрес электронной почты" />
-                    <input type="submit" value="Отправить статистику" style="background: #7d6aa5; border: none; box-shadow: none;"/>
-                </form>
+
+
+<!--                <form th:action="@{/sendMail}" method="post" onsubmit="eventDefault(e)">-->
+<!--                    <input type="text" th:name="addr" placeholder="Адрес электронной почты" style="margin-top: 10px;" />-->
+<!--                    <input type="submit" value="Отправить статистику" style="background: #7d6aa5; border: none; box-shadow: none;"/>-->
+<!--                </form>-->
             </div>
         </div>
         <div class="col-6">
@@ -143,40 +146,29 @@
                 <form th:action="@{/addWorker}" method="post" onsubmit="eventDefault(e)">
                     <input type="text" th:name="name" placeholder="Имя" />
                     <input type="text" th:name="job" placeholder="Должность" />
-                    <input type="text"  th:name="cluster_name" placeholder="Подразделение" />
-
-<!--                    <label for="selectboss" id="labelforselect">Укажите начальника сотрудника</label>-->
-<!--                    <select class="form-control" id="selectboss" th:name="bossName">-->
-<!--                        <option>...</option>-->
-<!--                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>-->
-<!--                    </select>-->
-
+                    <label for="selectcluster2" id="labelforselect2" style="margin-top: 10px;">Отдел</label>
+                    <select class="form-control" id="selectcluster2" th:name="cluster_name">
+                        <option th:each="w : ${clusters}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
                     <input type="submit" value="Сохранить" />
-
-<!--                    <input type="checkbox"  id="mainBoss"  style="margin-left: 10px;" onclick="checBox()">-->
-<!--                    <label for="mainBoss">Главный босс фирмы</label>-->
                 </form>
             </div>
         </div>
 
         <div class="col-6">
             <div class="form-style-8">
-                <h2>Новый cluster</h2>
+                <h2>Новый отдел</h2>
                 <form th:action="@{/addCluster}" method="post" onsubmit="eventDefault(e)">
                     <input type="text" th:name="name" placeholder="Имя" />
-                    <input type="text" th:name="bossName" placeholder="Boss name" />
-                    <input type="text"  th:name="headCluster" placeholder="Head cluster" />
-
-                    <!--                    <label for="selectboss" id="labelforselect">Укажите начальника сотрудника</label>-->
-                    <!--                    <select class="form-control" id="selectboss" th:name="bossName">-->
-                    <!--                        <option>...</option>-->
-                    <!--                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>-->
-                    <!--                    </select>-->
-
+                    <label for="selectcluster4" id="labelforselect4" style="margin-top: 10px;">Начальник отдела</label>
+                    <select class="form-control" id="selectcluster4" th:name="bossName">
+                        <option th:each="w : ${workers}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
+                    <label for="selectcluster3" id="labelforselect3" style="margin-top: 10px;">Вышестоящий отдел</label>
+                    <select class="form-control" id="selectcluster3" th:name="headCluster">
+                        <option th:each="w : ${clusters}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
                     <input type="submit" value="Сохранить" />
-
-                    <!--                    <input type="checkbox"  id="mainBoss"  style="margin-left: 10px;" onclick="checBox()">-->
-                    <!--                    <label for="mainBoss">Главный босс фирмы</label>-->
                 </form>
             </div>
         </div>
@@ -191,7 +183,6 @@
                     <th scope="col">Имя</th>
                     <th scope="col">Подразделение</th>
                     <th scope="col">Должность</th>
-                    <th scope="col">Id руководителя</th>
                     <th scope="col">Удаление</th>
                 </tr>
                 </thead>
@@ -199,9 +190,8 @@
                 <tr th:each="w : ${workers}">
                     <td th:text="${w.id}"></td>
                     <td th:text="${w.name}"></td>
-                    <td th:text="${w.cluster}"></td>
+                    <td th:text="${w?.cluster?.getName()}"></td>
                     <td th:text="${w.job}"></td>
-                    <td th:text="${w.bossName}"></td>
                     <td>
                         <form th:action="@{/deleteWorker/{id}(id=${w.id})}" method="post" onsubmit="eventDefault(e)">
                             <button type="submit" class="btn btn-dark"><i class="fa fa-eraser"></i></button>
@@ -212,17 +202,17 @@
             </table>
         </div>
     </div>
-    <form th:action="@{/addRole}" method="post" onsubmit="eventDefault(e)">
-        <input type="text" th:name="role_name" placeholder="role_name" />
-        <input type="submit" value="Save" />
-    </form>
+<!--    <form th:action="@{/addRole}" method="post" onsubmit="eventDefault(e)">-->
+<!--        <input type="text" th:name="role_name" placeholder="role_name" />-->
+<!--        <input type="submit" value="Save" />-->
+<!--    </form>-->
 
-    <form th:action="@{/addUser}" method="post" onsubmit="eventDefault(e)">
-        <input type="text" th:name="name" placeholder="name" />
-        <input type="text" th:name="pass" placeholder="pass" />
-        <input type="text" th:name="role_name" placeholder="role_name" />
-        <input type="submit" value="Save" />
-    </form>
+<!--    <form th:action="@{/addUser}" method="post" onsubmit="eventDefault(e)">-->
+<!--        <input type="text" th:name="name" placeholder="name" />-->
+<!--        <input type="text" th:name="pass" placeholder="pass" />-->
+<!--        <input type="text" th:name="role_name" placeholder="role_name" />-->
+<!--        <input type="submit" value="Save" />-->
+<!--    </form>-->
 </container>
 
 

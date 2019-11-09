@@ -24,16 +24,19 @@ public class MainController {
 
     @GetMapping(path = "/")
     public String showAllWorkers(Model model){
+        model.addAttribute("workers", clusterWorkerDTO.showAllWorkers());
+        model.addAttribute("clusters", clusterWorkerDTO.showAllClusters());
         return "index";
     }
 
     @PostMapping("/deleteWorker/{id}")
     public String deleteWorker(@PathVariable Long id){
-        return "index";
+        clusterWorkerDTO.deleteWorker(id);
+        return "redirect:/";
     }
 
-    @PostMapping(path = "/sendMail")
-    public String sendStats(@RequestParam String addr){
-        return "index";
-    }
+//    @PostMapping(path = "/sendMail")
+//    public String sendStats(@RequestParam String addr){
+//        return "index";
+//    }
 }

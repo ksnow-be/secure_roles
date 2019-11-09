@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>ClusterSearch</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 th:text="${podr.getName()}" style="color: #27A0A0"></h1>
+
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Начальник отдела</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${podr.getBoss().getName()}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Количетсво сотрудников</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${podr.getWorkers().size()}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Нижестоящие отделы</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="w : ${clusters}">
+                    <td th:text="${w.getName()}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <h2 style="color: #27A0A0">Список сотрудников</h2>
+            </div>
+            <table class="table" id="allUsers">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Должность</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="w : ${workers}">
+                    <td th:text="${w.name}"></td>
+                    <td th:text="${w.job}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12" style="text-align: center">
+            <a href="http://localhost:8080"><button type="button" class="btn btn-primary">На главную</button></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

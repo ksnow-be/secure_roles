@@ -30,18 +30,19 @@ public class ClusterWorkerDTO implements WorkerService {
             System.out.println("Worker already exists!");
             return;
         }
-
         Worker worker = new Worker();
         worker.setName(name);
         worker.setJob(job);
-
         if (cluster_name.equals("")){
             worker.setCluster(null);
+        }
+        else if (clusterRepository.findByName(cluster_name) == null){
+            System.out.println("Cluster not found");
+            return;
         }
         else{
             worker.setCluster(clusterRepository.findByName(cluster_name));
         }
-
         workerRepository.save(worker);
     }
 
@@ -50,11 +51,9 @@ public class ClusterWorkerDTO implements WorkerService {
             System.out.println("Cluster already exists!");
             return;
         }
-
         Cluster cluster = new Cluster();
         cluster.setName(name);
         cluster.setBoss(workerRepository.findByName(bossName));
-
         if (headCluster.equals("")){
             cluster.setHeadId(null);
         }
@@ -62,7 +61,44 @@ public class ClusterWorkerDTO implements WorkerService {
             Integer id = clusterRepository.findByName(headCluster).getId();
             cluster.setHeadId(id);
         }
-
         clusterRepository.save(cluster);
+    }
+
+    public String showClusterInfo(String cluster_name, Model model){
+        Cluster cluster = clusterRepository.findByName(cluster_name);
+        if (cluster == null){
+            System.out.println("Cluster not exist");
+            return "notfound";
+        }
+        model.addAttribute("podr", cluster);
+        model.addAttribute("workers", cluster.getWorkers());
+        model.addAttribute("clusters", recurFindCluster(cluster));
+        return "cluster";
+    }
+
+    private List<Cluster> recurFindCluster(Cluster cluster){
+        List<Cluster> res = new ArrayList<>();
+        for (Cluster c : cluster.getClusters()){
+            res.add(c);
+            res.addAll(recurFindCluster(c));
+        }
+        return res;
+    }
+
+    public List<Worker> showAllWorkers(){
+        return workerRepository.findAll();
+    }
+
+    public List<Cluster> showAllClusters(){
+        return clusterRepository.findAll();
+    }
+
+    public Worker findByName(String name){
+        return workerRepository.findByName(name);
+    }
+
+    @Transactional
+    public void deleteWorker(Long id){
+        workerRepository.deleteById(id);
     }
 }

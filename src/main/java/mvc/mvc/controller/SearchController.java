@@ -18,18 +18,14 @@ public class SearchController {
         this.clusterWorkerDTO = clusterWorkerDTO;
     }
 
-    @PostMapping(path = "/showBosses")
-    public String showBosses(@RequestParam String workerName, Model model){
-        return "redirect:/";
-    }
-
-    @PostMapping(path = "/showUnder")
-    public String showUnder(@RequestParam String bossName, Model model){
-        return "redirect:/";
+    @PostMapping(path = "/clusterInfo")
+    public String showClusterInfo(@RequestParam String clusterName, Model model){
+        return clusterWorkerDTO.showClusterInfo(clusterName, model);
     }
 
     @PostMapping(path = "/showName")
     public String findByName(@RequestParam String name, Model model){
-        return "redirect:/";
+        model.addAttribute("nameSearch", clusterWorkerDTO.findByName(name));
+        return "name";
     }
 }

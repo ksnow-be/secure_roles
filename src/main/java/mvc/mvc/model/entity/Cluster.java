@@ -19,12 +19,12 @@ public class Cluster {
     @ManyToOne
     private Worker boss;
 
-    @OneToMany(mappedBy = "cluster", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cluster", fetch = FetchType.EAGER)
     private List<Worker> workers;
 
     private Integer headId;
 
-    @OneToMany(mappedBy = "headId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "headId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Cluster> clustersList = new ArrayList<>();
 
 
