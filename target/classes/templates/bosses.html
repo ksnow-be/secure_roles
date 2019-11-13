@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>ShowUnders</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div>Результат по запросу: <h2 th:text="${worker}" style="color: #27A0A0"></h2></div>
+            <table class="table" id="allUsers">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Подразделение</th>
+                    <th scope="col">Должность</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="w : ${showBosses}">
+                    <td th:text="${w.getId()}"></td>
+                    <td th:text="${w.getName()}"></td>
+                    <td th:text="${w?.getCluster()?.getName()}"></td>
+                    <td th:text="${w.getJob()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12" style="text-align: center">
+            <a href="http://localhost:8080"><button type="button" class="btn btn-primary">На главную</button></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -2,6 +2,7 @@ package mvc.mvc.controller;
 
 import mvc.mvc.model.services.ClusterWorkerDTO;
 import mvc.mvc.model.components.MyMailSender;
+import mvc.mvc.model.services.UserRoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +16,21 @@ public class MainController {
 
     private MyMailSender mailSender;
     private ClusterWorkerDTO clusterWorkerDTO;
+    private UserRoleDTO userRoleDTO;
 
     @Autowired
-    public MainController(MyMailSender mailSender, ClusterWorkerDTO clusterWorkerDTO) {
+    public MainController(MyMailSender mailSender, ClusterWorkerDTO clusterWorkerDTO, UserRoleDTO userRoleDTO) {
         this.mailSender = mailSender;
         this.clusterWorkerDTO = clusterWorkerDTO;
+        this.userRoleDTO = userRoleDTO;
     }
 
     @GetMapping(path = "/")
     public String showAllWorkers(Model model){
         model.addAttribute("workers", clusterWorkerDTO.showAllWorkers());
         model.addAttribute("clusters", clusterWorkerDTO.showAllClusters());
+        model.addAttribute("bosses",clusterWorkerDTO.showClusterBosses());
+        model.addAttribute("roles", userRoleDTO.findAllRoles());
         return "index";
     }
 

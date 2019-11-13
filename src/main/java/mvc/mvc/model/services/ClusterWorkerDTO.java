@@ -33,7 +33,9 @@ public class ClusterWorkerDTO implements WorkerService {
         Worker worker = new Worker();
         worker.setName(name);
         worker.setJob(job);
-        if (cluster_name.equals("")){
+        worker.setIsBoss(false);
+        worker.setBossedCluster(null);
+        if (cluster_name.equals("...")){
             worker.setCluster(null);
         }
         else if (clusterRepository.findByName(cluster_name) == null){
@@ -53,15 +55,23 @@ public class ClusterWorkerDTO implements WorkerService {
         }
         Cluster cluster = new Cluster();
         cluster.setName(name);
-        cluster.setBoss(workerRepository.findByName(bossName));
-        if (headCluster.equals("")){
-            cluster.setHeadId(null);
+
+        Worker contender_to_boss = workerRepository.findByName(bossName);
+        cluster.setBoss(contender_to_boss);
+
+        if (headCluster.equals("...")){
+            cluster.setHeadCluster(null);
         }
         else{
-            Integer id = clusterRepository.findByName(headCluster).getId();
-            cluster.setHeadId(id);
+            cluster.setHeadCluster(clusterRepository.findByName(headCluster));
         }
         clusterRepository.save(cluster);
+
+        if (!contender_to_boss.getIsBoss()){
+            contender_to_boss.setIsBoss(true);
+            contender_to_boss.setBossedCluster(cluster);
+            workerRepository.save(contender_to_boss);
+        }
     }
 
     public String showClusterInfo(String cluster_name, Model model){
@@ -85,12 +95,53 @@ public class ClusterWorkerDTO implements WorkerService {
         return res;
     }
 
+    public List<Worker> showAllUnders(String worker_name){
+        Cluster cluster = workerRepository.findByName(worker_name).getBossedCluster();
+        List<Worker> res = new ArrayList<>();
+        res.addAll(cluster.getWorkers());
+        recurFindWorkers(res, cluster);
+        return res;
+    }
+
+    private void recurFindWorkers(List<Worker> list, Cluster cluster){
+        for (Cluster c : cluster.getClusters()){
+            if (!list.contains(c.getBoss())){
+                list.add(c.getBoss());
+            }
+            list.addAll(c.getWorkers());
+            recurFindWorkers(list, c);
+        }
+    }
+
+    public List<Worker> showAllBosses(String worker_name){
+        Cluster cluster = workerRepository.findByName(worker_name).getCluster();
+        if (cluster == null){
+            return null;
+        }
+
+        List<Worker> res = new ArrayList<>();
+
+        while (true){
+            res.add(cluster.getBoss());
+            if (cluster.getHeadCluster() == null){
+                break;
+            }
+            cluster = cluster.getHeadCluster();
+        }
+
+        return res;
+    }
+
     public List<Worker> showAllWorkers(){
         return workerRepository.findAll();
     }
 
     public List<Cluster> showAllClusters(){
         return clusterRepository.findAll();
+    }
+
+    public List<Worker> showClusterBosses(){
+        return workerRepository.findAllByIsBoss(true);
     }
 
     public Worker findByName(String name){

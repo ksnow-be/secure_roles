@@ -18,6 +18,27 @@ public class Worker {
     @JoinColumn(name = "cluster_id")
     private Cluster cluster;
 
+    private boolean isBoss;
+
+    @ManyToOne
+    @JoinColumn(name = "bossed_cluster")
+    private Cluster bossedCluster;
+
+    public boolean getIsBoss() {
+        return isBoss;
+    }
+
+    public void setIsBoss(boolean param) {
+        isBoss = param;
+    }
+
+    public Cluster getBossedCluster() {
+        return bossedCluster;
+    }
+
+    public void setBossedCluster(Cluster bossedCluster) {
+        this.bossedCluster = bossedCluster;
+    }
 
     public Long getId() {
         return id;

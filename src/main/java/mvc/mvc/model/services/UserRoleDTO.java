@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Component
 public class UserRoleDTO {
@@ -39,5 +41,9 @@ public class UserRoleDTO {
         user.setPass(bCryptPasswordEncoder.encode(pass));
         user.setRole(roleRepository.findByName(role_name));
         userRepository.save(user);
+    }
+
+    public List<Role> findAllRoles(){
+        return roleRepository.findAll();
     }
 }

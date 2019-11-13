@@ -28,4 +28,18 @@ public class SearchController {
         model.addAttribute("nameSearch", clusterWorkerDTO.findByName(name));
         return "name";
     }
+
+    @PostMapping(path = "/showUnders")
+    public String showAllUnders(@RequestParam String bossName, Model model){
+        model.addAttribute("boss", bossName);
+        model.addAttribute("unders", clusterWorkerDTO.showAllUnders(bossName));
+        return "unders";
+    }
+
+    @PostMapping(path = "/showBosses")
+    public String showAllBosses(@RequestParam String workerName, Model model){
+        model.addAttribute("worker", workerName);
+        model.addAttribute("showBosses", clusterWorkerDTO.showAllBosses(workerName));
+        return "bosses";
+    }
 }

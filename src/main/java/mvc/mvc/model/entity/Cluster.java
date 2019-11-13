@@ -16,15 +16,16 @@ public class Cluster {
 
     private String name;
 
-    @ManyToOne
-    private Worker boss;
+    @OneToMany(mappedBy = "bossedCluster", fetch = FetchType.EAGER)
+    private List<Worker> boss = new ArrayList<>();
 
     @OneToMany(mappedBy = "cluster", fetch = FetchType.EAGER)
     private List<Worker> workers;
 
-    private Integer headId;
+    @ManyToOne
+    private Cluster headCluster;
 
-    @OneToMany(mappedBy = "headId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "headCluster", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Cluster> clustersList = new ArrayList<>();
 
 
@@ -45,11 +46,11 @@ public class Cluster {
     }
 
     public Worker getBoss() {
-        return boss;
+        return boss.get(0);
     }
 
     public void setBoss(Worker boss) {
-        this.boss = boss;
+        this.boss.add(boss);
     }
 
     public List<Worker> getWorkers() {
@@ -60,12 +61,12 @@ public class Cluster {
         this.workers = workers;
     }
 
-    public Integer getHeadId() {
-        return headId;
+    public Cluster getHeadCluster() {
+        return headCluster;
     }
 
-    public void setHeadId(Integer headId) {
-        this.headId = headId;
+    public void setHeadCluster(Cluster headCluster) {
+        this.headCluster = headCluster;
     }
 
     public List<Cluster> getClusters() {

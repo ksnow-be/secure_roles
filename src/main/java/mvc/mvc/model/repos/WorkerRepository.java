@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Integer> {
     Worker findByName(String name);
+    List<Worker> findAllByIsBoss(boolean param);
     void deleteById(Long id);
 }
