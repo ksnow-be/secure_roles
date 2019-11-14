@@ -124,7 +124,7 @@
 
 <script>
     function hideAndSeek(param) {
-        var arr = ["forms", "newWork", "newCluster", "newRole", "newUser"];
+        var arr = ["forms", "newWork", "newCluster", "newRole", "newUser", "changeRole"];
 
         arr.forEach(function (el) {
             if (el == param){
@@ -139,6 +139,8 @@
 
 <nav class="navbar navbar-light" style="background-color: #4D4D4D">
     <h3 style="color: #2CBBBB" sec:authentication="name"></h3>
+    <h3 style="color: #2CBBBB" sec:authorize="hasRole('ROLE_ADMIN')">Роль: ADMIN</h3>
+    <h3 style="color: #2CBBBB" sec:authorize="hasRole('ROLE_USER')">Роль: USER</h3>
 
     <form th:action="@{/logout}" method="post">
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
@@ -148,22 +150,22 @@
 <container class="container">
 
     <div class="row">
-        <div class="col-2 mymenu" onclick="hideAndSeek('newWork')">
-            <h5>Новый сорудник</h5>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-2 mymenu" onclick="hideAndSeek('newWork')">
+            <h5>Сотрудик</h5>
         </div>
-        <div class="col-2 mymenu" onclick="hideAndSeek('newCluster')">
-            <h5>Новый отдел</h5>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-2 mymenu" onclick="hideAndSeek('newCluster')">
+            <h5>Отдел</h5>
         </div>
         <div class="col-2 mymenu" onclick="hideAndSeek('forms')">
-            <h5>Формы поиска</h5>
+            <h5>Формы</h5>
         </div>
-        <div class="col-2 mymenu" onclick="hideAndSeek('newRole')">
-            <h5>Новая роль</h5>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-2 mymenu" onclick="hideAndSeek('newRole')">
+            <h5>Роль</h5>
         </div>
-        <div class="col-2 mymenu" onclick="hideAndSeek('newUser')">
-            <h5>Новый польщователь</h5>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-2 mymenu" onclick="hideAndSeek('newUser')">
+            <h5>Юзер</h5>
         </div>
-        <div class="col-2 mymenu">
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-2 mymenu" onclick="hideAndSeek('changeRole')">
             <h5>Изменение ролей</h5>
         </div>
     </div>
@@ -275,6 +277,28 @@
             </div>
         </div>
         <div class="col-3"></div>
+
+        <div class="col-3"></div>
+        <div class="col-6" id="changeRole" style="display: none">
+            <div class="form-style-8">
+                <h2>Изменение ролей</h2>
+                <form th:action="@{/changeRole}" method="post" onsubmit="eventDefault(e)">
+
+                    <label for="selectuser" id="labelforselect141" style="margin-top: 10px;">Юзер</label>
+                    <select class="form-control" id="selectuser" th:name="userName">
+                        <option th:each="w : ${users}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
+
+                    <label for="selectrole2" id="labelforselect143" style="margin-top: 10px;">Роль</label>
+                    <select class="form-control" id="selectrole2" th:name="roleName">
+                        <option th:each="w : ${roles}" th:value="${w.getName()}" th:text="${w.getName()}"></option>
+                    </select>
+
+                    <input type="submit" value="Сохранить" />
+                </form>
+            </div>
+        </div>
+        <div class="col-3"></div>
     </div>
 
     <div class="row" style="margin-left: 10px; margin-right: 10px;">
@@ -286,7 +310,7 @@
                     <th scope="col">Имя</th>
                     <th scope="col">Подразделение</th>
                     <th scope="col">Должность</th>
-                    <th scope="col">Удаление</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')" scope="col">Удаление</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -295,7 +319,7 @@
                     <td th:text="${w.name}"></td>
                     <td th:text="${w?.cluster?.getName()}"></td>
                     <td th:text="${w.job}"></td>
-                    <td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
                         <form th:action="@{/deleteWorker/{id}(id=${w.id})}" method="post" onsubmit="eventDefault(e)">
                             <button type="submit" class="btn btn-dark"><i class="fa fa-eraser"></i></button>
                         </form>

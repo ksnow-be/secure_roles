@@ -37,7 +37,7 @@ public class MyMailSender {
                 helper.setText(processedHTMLTemplate, true);
             };
             javaMailSender.send(preparator);
-            logger.mailSend(to);
+//            logger.mailSend(to);
         } catch (MailException e){
             System.out.println(e.getLocalizedMessage());
         }

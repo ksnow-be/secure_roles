@@ -5,7 +5,6 @@ import mvc.mvc.model.entity.Cluster;
 import mvc.mvc.model.entity.Worker;
 import mvc.mvc.model.repos.ClusterRepository;
 import mvc.mvc.model.repos.WorkerRepository;
-import mvc.mvc.model.repos.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -15,19 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ClusterWorkerDTO implements WorkerService {
+public class ClusterWorkerDTO {
+
     private WorkerRepository workerRepository;
     private ClusterRepository clusterRepository;
+    private MyLogger logger;
 
     @Autowired
-    public ClusterWorkerDTO(WorkerRepository workerRepository, ClusterRepository clusterRepository) {
+    public ClusterWorkerDTO(WorkerRepository workerRepository, ClusterRepository clusterRepository, MyLogger logger) {
         this.workerRepository = workerRepository;
         this.clusterRepository = clusterRepository;
+        this.logger = logger;
     }
 
     public void addWorker(String name, String job, String cluster_name){
         if (workerRepository.findByName(name) != null){
-            System.out.println("Worker already exists!");
             return;
         }
         Worker worker = new Worker();
@@ -39,18 +40,18 @@ public class ClusterWorkerDTO implements WorkerService {
             worker.setCluster(null);
         }
         else if (clusterRepository.findByName(cluster_name) == null){
-            System.out.println("Cluster not found");
+            logger.errorCluster(cluster_name);
             return;
         }
         else{
             worker.setCluster(clusterRepository.findByName(cluster_name));
         }
         workerRepository.save(worker);
+        logger.addWorker(worker.getName());
     }
 
     public void addCluster(String name, String bossName, String headCluster){
         if (clusterRepository.findByName(name) != null){
-            System.out.println("Cluster already exists!");
             return;
         }
         Cluster cluster = new Cluster();
@@ -66,6 +67,7 @@ public class ClusterWorkerDTO implements WorkerService {
             cluster.setHeadCluster(clusterRepository.findByName(headCluster));
         }
         clusterRepository.save(cluster);
+        logger.addCluster(cluster.getName());
 
         if (!contender_to_boss.getIsBoss()){
             contender_to_boss.setIsBoss(true);
@@ -77,7 +79,7 @@ public class ClusterWorkerDTO implements WorkerService {
     public String showClusterInfo(String cluster_name, Model model){
         Cluster cluster = clusterRepository.findByName(cluster_name);
         if (cluster == null){
-            System.out.println("Cluster not exist");
+            logger.errorCluster(cluster_name);
             return "notfound";
         }
         model.addAttribute("podr", cluster);
@@ -118,9 +120,7 @@ public class ClusterWorkerDTO implements WorkerService {
         if (cluster == null){
             return null;
         }
-
         List<Worker> res = new ArrayList<>();
-
         while (true){
             res.add(cluster.getBoss());
             if (cluster.getHeadCluster() == null){
@@ -128,7 +128,6 @@ public class ClusterWorkerDTO implements WorkerService {
             }
             cluster = cluster.getHeadCluster();
         }
-
         return res;
     }
 

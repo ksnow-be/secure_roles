@@ -31,6 +31,7 @@ public class MainController {
         model.addAttribute("clusters", clusterWorkerDTO.showAllClusters());
         model.addAttribute("bosses",clusterWorkerDTO.showClusterBosses());
         model.addAttribute("roles", userRoleDTO.findAllRoles());
+        model.addAttribute("users", userRoleDTO.findAllUsers());
         return "index";
     }
 
@@ -39,9 +40,4 @@ public class MainController {
         clusterWorkerDTO.deleteWorker(id);
         return "redirect:/";
     }
-
-//    @PostMapping(path = "/sendMail")
-//    public String sendStats(@RequestParam String addr){
-//        return "index";
-//    }
 }

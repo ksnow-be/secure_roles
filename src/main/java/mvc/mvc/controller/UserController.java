@@ -29,4 +29,10 @@ public class UserController {
         userRoleDTO.saveUser(name, pass, role_name);
         return "redirect:/";
     }
+
+    @PostMapping("/changeRole")
+    public String changeRoleForUser(@RequestParam String userName, @RequestParam String roleName){
+        userRoleDTO.changeRole(userName, roleName);
+        return "redirect:/";
+    }
 }
