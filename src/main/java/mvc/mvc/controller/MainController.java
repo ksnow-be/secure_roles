@@ -40,4 +40,9 @@ public class MainController {
         clusterWorkerDTO.deleteWorker(id);
         return "redirect:/";
     }
+
+    @PostMapping("/sendMail")
+    public String sendMail(@RequestParam String addr){
+        return mailSender.sendStats(addr);
+    }
 }

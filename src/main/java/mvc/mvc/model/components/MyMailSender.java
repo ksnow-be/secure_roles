@@ -1,6 +1,8 @@
 package mvc.mvc.model.components;
 
 import mvc.mvc.model.repos.WorkerRepository;
+import mvc.mvc.model.services.ClusterWorkerDTO;
+import mvc.mvc.model.services.UserRoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,14 +17,16 @@ public class MyMailSender {
 
     private JavaMailSender javaMailSender;
     private TemplateEngine templateEngine;
-    private WorkerRepository workerRepository;
+    private UserRoleDTO userRoleDTO;
+    private ClusterWorkerDTO clusterWorkerDTO;
     private MyLogger logger;
 
     @Autowired
-    public MyMailSender(JavaMailSender javaMailSender, TemplateEngine templateEngine, WorkerRepository workerRepository, MyLogger logger) {
+    public MyMailSender(JavaMailSender javaMailSender, TemplateEngine templateEngine, UserRoleDTO userRoleDTO, ClusterWorkerDTO clusterWorkerDTO, MyLogger logger) {
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
-        this.workerRepository = workerRepository;
+        this.userRoleDTO = userRoleDTO;
+        this.clusterWorkerDTO = clusterWorkerDTO;
         this.logger = logger;
     }
 
@@ -37,7 +41,6 @@ public class MyMailSender {
                 helper.setText(processedHTMLTemplate, true);
             };
             javaMailSender.send(preparator);
-//            logger.mailSend(to);
         } catch (MailException e){
             System.out.println(e.getLocalizedMessage());
         }
@@ -46,7 +49,8 @@ public class MyMailSender {
 
     private String constructHTMLTemplate(){
         Context context = new Context();
-        context.setVariable("workers", workerRepository.findAll());
-        return templateEngine.process("mailsender", context);
+        context.setVariable("workers", clusterWorkerDTO.showAllWorkers());
+        context.setVariable("clusters", clusterWorkerDTO.showAllClusters());
+        return templateEngine.process("mail", context);
     }
 }

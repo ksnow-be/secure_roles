@@ -205,6 +205,11 @@
                     <input type="submit" value="Поиск" />
                 </form>
 
+                <form th:action="@{/sendMail}" method="post" onsubmit="eventDefault(e)">
+                    <input type="text" th:name="addr" placeholder="Адрес эл.почты" />
+                    <input type="submit" value="Отправить данные"  />
+                </form>
+
             </div>
         </div>
         <div class="col-3"></div>
